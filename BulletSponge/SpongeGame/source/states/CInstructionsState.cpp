@@ -88,7 +88,7 @@ void CInstructionsState::Update(void)
 		XAUDIO->MusicPlaySong(m_nBGMID,true);	
 
 
-	OM->UpdateObjects(GAME->GetElapsedTime());
+	OM->UpdateObjects(GAME->GetTimer().GetDeltaTime());
 
 	if(m_fSpawnTime > 2.0f)
 	{
@@ -96,7 +96,7 @@ void CInstructionsState::Update(void)
 		m_fSpawnTime = 0.0f;
 	}
 
-	m_fSpawnTime += GAME->GetElapsedTime();
+	m_fSpawnTime += GAME->GetTimer().GetDeltaTime();
 
 	MS->ProcessMessages();
 	

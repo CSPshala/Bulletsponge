@@ -175,7 +175,7 @@ void CEnemy::Update(float fElapsedTime)
 				}
 
 				// Updating fire timer
-				m_fShootTimer += GAME->GetElapsedTime();
+				m_fShootTimer += GAME->GetTimer().GetDeltaTime();
 			}
 		}		
 
@@ -186,7 +186,7 @@ void CEnemy::Update(float fElapsedTime)
 
 			// Gravity
 			if(GetState() == JUMP || GetState() == FALLING)
-				SetVelY(GetVelY() + 1.0f);
+				SetVelY(GetVelY() + 4.0f);
 
 			SetPosX(GetPosX()+GetVelX() * fElapsedTime);
 			SetPosY(GetPosY()+GetVelY() * fElapsedTime);	
@@ -200,7 +200,7 @@ void CEnemy::Update(float fElapsedTime)
 		Behavior();
 
 		// Updating jump timer 
-		m_fJumpTimer += GAME->GetElapsedTime();
+		m_fJumpTimer += GAME->GetTimer().GetDeltaTime();
 	}
 	else
 	{
@@ -210,7 +210,7 @@ void CEnemy::Update(float fElapsedTime)
 		SetPosX(GetPosX()+GetVelX() * fElapsedTime);
 		SetPosY(GetPosY()+GetVelY() * fElapsedTime);	
 
-		m_fRotation += 1.0f * GAME->GetElapsedTime();		
+		m_fRotation += 1.0f *GAME->GetTimer().GetDeltaTime();		
 	}
 
 	if(GetPosY() > GAME->GetWindowHeight() + 600)
@@ -366,7 +366,7 @@ void CEnemy::Behavior()
 		m_fChange = 0.0f;
 	}
 
-	m_fChange += GAME->GetElapsedTime();
+	m_fChange += GAME->GetTimer().GetDeltaTime();
 	
 	
 }
@@ -381,7 +381,7 @@ void CEnemy::FlashRedTimer(float fTime)
 			m_fHitColorTime = 0.0f;
 		}
 		else
-			m_fHitColorTime += GAME->GetElapsedTime();		
+			m_fHitColorTime += GAME->GetTimer().GetDeltaTime();		
 	}		
 }
 ////////////////////////////////////////

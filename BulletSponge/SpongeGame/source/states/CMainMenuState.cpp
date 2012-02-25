@@ -130,7 +130,7 @@ bool CMainMenuState::Input(void)
 
 void CMainMenuState::Update(void)
 {
-	OM->UpdateObjects(GAME->GetElapsedTime());
+	OM->UpdateObjects(GAME->GetTimer().GetDeltaTime());
 
 	if(m_fSpawnTime > 2.0f)
 	{
@@ -141,7 +141,7 @@ void CMainMenuState::Update(void)
 	if(!XAUDIO->MusicIsSongPlaying(m_nBGMID))
 		XAUDIO->MusicPlaySong(m_nBGMID);
 
-	m_fSpawnTime += GAME->GetElapsedTime();
+	m_fSpawnTime += GAME->GetTimer().GetDeltaTime();
 
 	MS->ProcessMessages();
 }
@@ -169,9 +169,9 @@ void CMainMenuState::Render(void)
 			m_bGrow = false;
 
 		if(m_bGrow)
-			m_fPulse += 0.1f * CGame::GetInstance()->GetElapsedTime();
+			m_fPulse += 0.1f * GAME->GetTimer().GetDeltaTime();
 		else if(!m_bGrow)
-			m_fPulse -= 0.1f * CGame::GetInstance()->GetElapsedTime();
+			m_fPulse -= 0.1f * GAME->GetTimer().GetDeltaTime();
 		
 
 		// Offset stuff to make everything line up nicely

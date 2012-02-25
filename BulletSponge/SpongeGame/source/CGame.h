@@ -52,7 +52,7 @@ public:
 		int GetWindowHeight() {return m_nWindowHeight;}
 		int GetWindowWidth() {return m_nWindowWidth;}
 		POINT GetMousePos() {return m_tMousePT;}
-		float GetElapsedTime() {return m_fElapsedTime;}
+		Timer GetTimer() {return GameTimer;}
 
 	/********** Public Mutators  ************/	
 		// Game State
@@ -93,11 +93,9 @@ private:
 		int m_nWindowWidth;
 		// Crosshair coordinates
 		POINT m_tMousePT;
-		// For Game timing:
-		DWORD					m_dwTimeStamp;
-		float					m_fElapsedTime;		// delta time. Time (in seconds) between frames
-		float					m_fGameTime;		// how long the game has been playing
-		DWORD					m_dwPreviousTimeStamp;	// Time samp from the previous frame	
+		
+		// Game timer
+		Timer GameTimer;
 
 	/********** Private Accessors ************/
 

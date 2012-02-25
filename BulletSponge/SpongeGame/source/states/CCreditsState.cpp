@@ -106,10 +106,10 @@ void CCreditsState::Update(void)
 	if(!XAUDIO->MusicIsSongPlaying(m_nBGMID))
 		XAUDIO->MusicPlaySong(m_nBGMID,true);
 
-	m_fScrollTimer += GAME->GetElapsedTime();
+	m_fScrollTimer += GAME->GetTimer().GetDeltaTime();
 
 
-	OM->UpdateObjects(GAME->GetElapsedTime());
+	OM->UpdateObjects(GAME->GetTimer().GetDeltaTime());
 
 	if(m_fSpawnTime > 2.0f)
 	{
@@ -117,7 +117,7 @@ void CCreditsState::Update(void)
 		m_fSpawnTime = 0.0f;
 	}
 
-	m_fSpawnTime += GAME->GetElapsedTime();
+	m_fSpawnTime += GAME->GetTimer().GetDeltaTime();
 
 	MS->ProcessMessages();
 

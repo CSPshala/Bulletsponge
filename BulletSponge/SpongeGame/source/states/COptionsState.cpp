@@ -191,14 +191,14 @@ bool COptionsState::Input(void)
 		GAME->ChangeState(CMainMenuState::GetInstance());
 
 	// Updating timer
-	m_fChangeTimer += GAME->GetElapsedTime();
+	m_fChangeTimer += GAME->GetTimer().GetDeltaTime();
 
 	return true;
 }
 
 void COptionsState::Update(void)
 {
-	OM->UpdateObjects(GAME->GetElapsedTime());
+	OM->UpdateObjects(GAME->GetTimer().GetDeltaTime());
 
 	if(m_fSpawnTime > 2.0f)
 	{
@@ -206,7 +206,7 @@ void COptionsState::Update(void)
 		m_fSpawnTime = 0.0f;
 	}
 
-	m_fSpawnTime += GAME->GetElapsedTime();
+	m_fSpawnTime += GAME->GetTimer().GetDeltaTime();
 
 	MS->ProcessMessages();
 }

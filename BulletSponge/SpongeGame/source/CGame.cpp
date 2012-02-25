@@ -76,19 +76,14 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance, int nScreenWidth,
 	m_nWindowHeight = nScreenHeight;
 
 	// Seeding rand
-	srand(unsigned int(time(0)));		
+	srand(unsigned int(time(0)));	
+
+	GameTimer.Reset();
 }
 
 bool CGame::Main()
 {
-	/////////////////////////////////////////////
-	//  Calculate elapsed time
-	DWORD dwStartTimeStamp = GetTickCount();
-
-	m_fElapsedTime = (float)(dwStartTimeStamp - m_dwPreviousTimeStamp) / 1000.0f;	
-
-	m_dwPreviousTimeStamp = dwStartTimeStamp;
-	/////////////////////////////////////////////
+	
 
 	// 3 Things the game does during execution
 	// Input
@@ -210,9 +205,9 @@ bool CGame::Input()
 
 void CGame::Update()
 {
-	///////////////////////////////
-	// UPDATING GAME TIME
-	m_fGameTime += m_fElapsedTime;
+	///////////////////////////
+	// Updating Game Timer
+	GameTimer.Update();
 
 	m_pCurState->Update();	// must be called or you will mess stuff up
 

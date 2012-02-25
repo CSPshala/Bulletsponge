@@ -71,7 +71,7 @@ void CBullet::Update(float fElapsedTime)
 	if(m_fTimer > 10.0f)
 		MS->SendMsg(new CDestroyBulletMessage(this));
 
-	m_fTimer += GAME->GetElapsedTime();
+	m_fTimer += GAME->GetTimer().GetDeltaTime();
 
 	CBase::Update(fElapsedTime);
 }

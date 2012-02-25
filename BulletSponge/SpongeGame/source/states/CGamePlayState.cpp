@@ -310,7 +310,7 @@ void CGamePlayState::Update(void)
 		}
 		
 		XAUDIO->Update();
-		OM->UpdateObjects(CGame::GetInstance()->GetElapsedTime());
+		OM->UpdateObjects(CGame::GetInstance()->GetTimer().GetDeltaTime());
 		OM->CheckCollisions();
 		ES->ProcessEvents();
 		MS->ProcessMessages();
@@ -324,7 +324,7 @@ void CGamePlayState::Update(void)
 			GAME->ChangeState(CHighScoreState::GetInstance());
 		}		
 
-		m_fLossTimer += GAME->GetElapsedTime();
+		m_fLossTimer += GAME->GetTimer().GetDeltaTime();
 	}
 	else if(m_bHasWon)
 	{		
@@ -337,7 +337,7 @@ void CGamePlayState::Update(void)
 			GAME->ChangeState(CHighScoreState::GetInstance());
 		}			
 
-		m_fWinTimer += GAME->GetElapsedTime();
+		m_fWinTimer += GAME->GetTimer().GetDeltaTime();
 	}
 }
 
@@ -505,7 +505,7 @@ void CGamePlayState::MessageProc(CBaseMessage* pMsg)
 			// Creating player
 			CPlayer* tempPlayer = (CPlayer*)CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->CreateObject("CPlayer");
 			tempPlayer->SetPosX((float)pGameState->m_pCurLevel->GetPlayerSpawnX());
-			tempPlayer->SetPosY((float)pGameState->m_pCurLevel->GetPlayerSpawnY()- 200);
+			tempPlayer->SetPosY((float)pGameState->m_pCurLevel->GetPlayerSpawnY());
 			tempPlayer->SetOffsetX(pGameState->m_pCurLevel->GetOffsetX());
 			tempPlayer->SetOffsetY(pGameState->m_pCurLevel->GetOffsetY());
 			tempPlayer->SetWidth(64);
@@ -671,7 +671,7 @@ void CGamePlayState::GenerateEnemies()
 	}
 
 	// Updating enemy timer
-	SetEnemyTimer(GetEnemyTimer() + GAME->GetElapsedTime());
+	SetEnemyTimer(GetEnemyTimer() + GAME->GetTimer().GetDeltaTime());
 }
 
 ////////////////////////////////////////

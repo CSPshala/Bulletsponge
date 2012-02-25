@@ -209,7 +209,7 @@ void CPlayer::Update(float fElapsedTime)
 
 		// Gravity
 		if(GetState() == JUMP || GetState() == FALLING)
-			SetVelY(GetVelY() + 1.0f);
+			SetVelY(GetVelY() + 4.0f);
 
 		SetPosX(GetPosX()+(GetVelX() * fElapsedTime));
 		SetPosY(GetPosY()+(GetVelY() * fElapsedTime));	
@@ -311,7 +311,7 @@ void CPlayer::Render()
 		}
 
 		if(m_fRespawnTime < 3.0f)
-			m_fRespawnTime += GAME->GetElapsedTime();
+			m_fRespawnTime += GAME->GetTimer().GetDeltaTime();
 		else
 			m_bRespawning = false;
 	}

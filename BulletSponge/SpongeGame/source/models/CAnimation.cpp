@@ -44,7 +44,7 @@ CAnimation::~CAnimation()
 // and moves to the next one in order.
 RECT CAnimation::GetFrame()
 {
-	SetTimeWaited(GetTimeWaited() + GAME->GetElapsedTime());
+	SetTimeWaited(GetTimeWaited() + GAME->GetTimer().GetDeltaTime());
 
 	RECT tRect;
 	
