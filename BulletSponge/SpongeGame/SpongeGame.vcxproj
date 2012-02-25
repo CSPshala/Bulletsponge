@@ -99,6 +99,7 @@
     <ClCompile Include="source\states\CInstructionsState.cpp" />
     <ClCompile Include="source\states\CMainMenuState.cpp" />
     <ClCompile Include="source\states\COptionsState.cpp" />
+    <ClCompile Include="source\Timer.cpp" />
     <ClCompile Include="source\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +135,7 @@
     <ClInclude Include="source\states\CMainMenuState.h" />
     <ClInclude Include="source\states\COptionsState.h" />
     <ClInclude Include="source\states\IGameState.h" />
+    <ClInclude Include="source\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="derp.jct" />

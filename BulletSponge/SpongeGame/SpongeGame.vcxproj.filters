@@ -105,6 +105,9 @@
     <ClCompile Include="source\states\CInstructionsState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="source\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\SGD Wrappers\CSGD_Direct3D.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="source\states\CInstructionsState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Timer.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
