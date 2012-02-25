@@ -211,8 +211,8 @@ void CPlayer::Update(float fElapsedTime)
 		if(GetState() == JUMP || GetState() == FALLING)
 			SetVelY(GetVelY() + 1.0f);
 
-		SetPosX(GetPosX()+GetVelX() * fElapsedTime);
-		SetPosY(GetPosY()+GetVelY() * fElapsedTime);	
+		SetPosX(GetPosX()+(GetVelX() * fElapsedTime));
+		SetPosY(GetPosY()+(GetVelY() * fElapsedTime));	
 	//
 	/////////////////////////////////////END OF UPDATE//////////////////////////////
 

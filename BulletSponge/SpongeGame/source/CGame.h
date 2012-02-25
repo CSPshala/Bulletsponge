@@ -29,6 +29,8 @@ using namespace std;
 #include "states\CMainMenuState.h"
 // Game Class Models
 #include "models\CLevel.h"
+// DRX Timer
+#include "Timer.h"
 
 
 class CGame

@@ -505,7 +505,7 @@ void CGamePlayState::MessageProc(CBaseMessage* pMsg)
 			// Creating player
 			CPlayer* tempPlayer = (CPlayer*)CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->CreateObject("CPlayer");
 			tempPlayer->SetPosX((float)pGameState->m_pCurLevel->GetPlayerSpawnX());
-			tempPlayer->SetPosY((float)pGameState->m_pCurLevel->GetPlayerSpawnY()- 64);
+			tempPlayer->SetPosY((float)pGameState->m_pCurLevel->GetPlayerSpawnY()- 200);
 			tempPlayer->SetOffsetX(pGameState->m_pCurLevel->GetOffsetX());
 			tempPlayer->SetOffsetY(pGameState->m_pCurLevel->GetOffsetY());
 			tempPlayer->SetWidth(64);
