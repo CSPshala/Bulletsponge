@@ -33,7 +33,6 @@
 #pragma comment(lib, "dbghelp.lib")
 
 
-
 const char* g_szWINDOW_CLASS_NAME	= "SGDWindowClass";			//	Window Class Name.
 
 const char* g_szWINDOW_TITLE		= "BULLETSPONGE";	//	Window Title.
@@ -47,6 +46,8 @@ const int	g_nWINDOW_HEIGHT		= 600;						//	Window Height.
 	const BOOL	g_bIS_WINDOWED			= FALSE;
 #endif
 
+
+
 //	Handler function that writes out a dump file
 LONG WINAPI Handler(_EXCEPTION_POINTERS * exPointers)
 {
@@ -57,6 +58,7 @@ LONG WINAPI Handler(_EXCEPTION_POINTERS * exPointers)
 		CREATE_ALWAYS, 
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
+	
 
 	if (theFile != INVALID_HANDLE_VALUE)
 	{

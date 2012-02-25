@@ -10,6 +10,8 @@
 #include "messaging\CSGD_EventSystem.h"
 #include "models/CBase.h"
 #include <vector>
+#include "models\CPlayer.h"
+#include "models\CEnemy.h"
 using std::vector;
 
 CSGD_ObjectManager* CSGD_ObjectManager::sm_pInstance = NULL;
@@ -31,8 +33,10 @@ void CSGD_ObjectManager::UpdateObjects(float fElapsedTime)
 
 	while(iter != m_vObjectList.end())
 	{
-		if(((CBase*)(*iter))->GetIsActive())		
-			(*iter)->Update(fElapsedTime);			
+		if(((CBase*)(*iter))->GetIsActive())	
+		{
+			(*iter)->Update(fElapsedTime);	
+		}
 		else
 			deadObjects.push_back(*iter);
 

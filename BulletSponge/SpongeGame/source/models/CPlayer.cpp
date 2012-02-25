@@ -20,6 +20,15 @@
 #include <string>
 using std::string;
 
+////////////////////////////////////////
+//				MISC
+////////////////////////////////////////
+#ifdef _DEBUG
+//****GLOBAL CONSOLE HANDLE FOR DEBUG ONLY*****//
+HANDLE theConsole;
+DWORD  consoleChars;
+#endif
+
 ///////////////////////////////////////////////
 //  CONSTRUCTOR / DECONSTRUCT / OP OVERLOADS
 ///////////////////////////////////////////////
@@ -77,7 +86,7 @@ CPlayer::CPlayer()
 	SetType(OBJ_PLAYER);
 
 	SetMovementSpeedX(200.0f);
-	SetMovementSpeedY(800.0f);	
+	SetMovementSpeedY(700.0f);	
 
 	SetState(REST);
 
@@ -93,6 +102,12 @@ CPlayer::CPlayer()
 
 	m_bRespawning = false;
 	m_fRespawnTime = 0.0f;
+
+#ifdef _DEBUG
+	// Starting console if in debug
+	/*AllocConsole();
+	theConsole = GetStdHandle(STD_OUTPUT_HANDLE);*/
+#endif
 }
 
 CPlayer::~CPlayer()
@@ -209,14 +224,30 @@ void CPlayer::Update(float fElapsedTime)
 
 		// Gravity
 		if(GetState() == JUMP || GetState() == FALLING)
-			SetVelY(GetVelY() + 4.0f);
+			SetVelY(GetVelY() + 1000.0f * GAME->GetTimer().GetDeltaTime());
 
-		SetPosX(GetPosX()+(GetVelX() * fElapsedTime));
-		SetPosY(GetPosY()+(GetVelY() * fElapsedTime));	
+		SetPosX(GetPosX()+(GetVelX() * GAME->GetTimer().GetDeltaTime()));
+		SetPosY(GetPosY()+(GetVelY() * GAME->GetTimer().GetDeltaTime()));	
 	//
 	/////////////////////////////////////END OF UPDATE//////////////////////////////
 
+#ifdef _DEBUG
+		/*static float outputtime = 0.2f;
 
+		if(GetVelY() < -800.0f || GetVelY() > 800.0f)
+		{
+		char buffer[50];
+		
+		sprintf(buffer,"%f \n",GetVelY());
+
+		WriteConsole(theConsole,buffer,strlen(buffer),&consoleChars,NULL);
+
+		outputtime = 0.5f;
+		}
+		else
+			outputtime -= GAME->GetTimer().GetDeltaTime();
+*/
+#endif
 
 }
 

@@ -166,7 +166,7 @@ bool CGamePlayState::Input(void)
 		{
 			if(DI->KeyPressed(DIK_1))
 			{
-				MS->SendMsg(new CCreateEnemyMessage());
+				MS->SendMsg(new CCreateEnemyMessage());				
 			}
 
 
@@ -174,10 +174,9 @@ bool CGamePlayState::Input(void)
 			{
 				SetIsPaused(true);
 			}
-			else if(DI->CheckBufferedKeysEx())
-			{					
-				if(isalpha(DI->CheckBufferedKeysEx()))							
-					m_qInputBuffer.push(DI->CheckBufferedKeysEx());
+			else if(isalpha(DI->CheckBufferedKeysEx()))
+			{																
+				m_qInputBuffer.push(DI->CheckBufferedKeysEx());
 
 				DI->ClearInput();
 			}
@@ -228,6 +227,8 @@ bool CGamePlayState::Input(void)
 		}
 	}	
 
+	
+
 	return true;
 }
 
@@ -239,7 +240,7 @@ void CGamePlayState::Update(void)
 			m_pCurLevel->Update();
 
 		// Making tons of enemies
-			GenerateEnemies();
+			//GenerateEnemies();
 
 		// Adding a single char to the string from the queue
 	    // comparing to cheats

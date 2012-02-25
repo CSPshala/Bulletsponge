@@ -16,6 +16,11 @@
 #include "states\CInstructionsState.h"
 #include <ctime>
 
+////////////////////////////////////////
+//				MISC
+////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////
 //  CONSTRUCTOR / DECONSTRUCT / OP OVERLOADS
@@ -30,6 +35,8 @@ CGame::CGame()
 	m_pOF	= NULL;
 	m_pMS	= NULL;
 	m_pES	= NULL;
+
+	
 }
 
 CGame::~CGame()
@@ -198,8 +205,9 @@ bool CGame::Input()
 	}		
 
 	if(!m_pCurState->Input())
-		return false;
+		return false;	
 	
+
 	return true;
 }
 
@@ -209,8 +217,7 @@ void CGame::Update()
 	// Updating Game Timer
 	GameTimer.Update();
 
-	m_pCurState->Update();	// must be called or you will mess stuff up
-
+	m_pCurState->Update();	// must be called or you will mess stuff up	
 }
 
 void CGame::Render()

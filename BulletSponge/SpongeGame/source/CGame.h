@@ -33,6 +33,7 @@ using namespace std;
 #include "Timer.h"
 
 
+
 class CGame
 {
 public:
@@ -52,13 +53,14 @@ public:
 		int GetWindowHeight() {return m_nWindowHeight;}
 		int GetWindowWidth() {return m_nWindowWidth;}
 		POINT GetMousePos() {return m_tMousePT;}
-		Timer GetTimer() {return GameTimer;}
+		Timer& GetTimer() {return GameTimer;}
 
 	/********** Public Mutators  ************/	
 		// Game State
 		void ChangeState(IGameState* pNewState);
 		void SetMousePos(POINT tMousePT) {m_tMousePT = tMousePT;}
 
+	
 private:
 	/********** Construct / Deconstruct / OP Overloads ************/
 		// Proper Singleton

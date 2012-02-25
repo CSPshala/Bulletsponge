@@ -71,7 +71,7 @@ CEnemy::CEnemy()
 	SetType(OBJ_ENEMY);
 
 	SetMovementSpeedX(150.0f);
-	SetMovementSpeedY(800.0f);
+	SetMovementSpeedY(700.0f);
 
 	SetState(SPAWNING);
 
@@ -123,6 +123,8 @@ void CEnemy::Update(float fElapsedTime)
 						SetVelY(-GetMovementSpeedY());
 						m_fJumpTimer = 0.0f;
 					}
+
+					
 				}
 			}
 			break;
@@ -186,10 +188,10 @@ void CEnemy::Update(float fElapsedTime)
 
 			// Gravity
 			if(GetState() == JUMP || GetState() == FALLING)
-				SetVelY(GetVelY() + 4.0f);
+				SetVelY(GetVelY() + 1000.0f * GAME->GetTimer().GetDeltaTime());
 
-			SetPosX(GetPosX()+GetVelX() * fElapsedTime);
-			SetPosY(GetPosY()+GetVelY() * fElapsedTime);	
+			SetPosX(GetPosX()+GetVelX() * GAME->GetTimer().GetDeltaTime());
+			SetPosY(GetPosY()+GetVelY() * GAME->GetTimer().GetDeltaTime());	
 		//
 		/////////////////////////////////////END OF UPDATE//////////////////////////////
 
