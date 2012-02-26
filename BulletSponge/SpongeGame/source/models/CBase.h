@@ -24,7 +24,7 @@
 ////////////////////////////////////////
 //				MISC
 ////////////////////////////////////////
-enum ObjType{OBJ_BASE,OBJ_PLAYER,OBJ_ENEMY,OBJ_BULLET,OBJ_WORLD,OBJ_MAX};
+enum ObjType{OBJ_BASE,OBJ_PLAYER,OBJ_ENEMY,OBJ_ROBOT,OBJ_BULLET,OBJ_WORLD,OBJ_MAX};
 
 
 class CBase : public IBaseInterface

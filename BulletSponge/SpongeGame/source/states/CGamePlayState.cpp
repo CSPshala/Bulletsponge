@@ -24,6 +24,7 @@ using namespace std;
 #include "../models/CPlayer.h"
 #include "../models/CEnemy.h"
 #include "../models/CBullet.h"
+#include "../models/CRobot.h"
 
 ////////////////////////////////////////
 //				MISC
@@ -108,6 +109,7 @@ void CGamePlayState::Enter(void)
 		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->RegisterClassType<CPlayer>("CPlayer");
 		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->RegisterClassType<CEnemy>("CEnemy");
 		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->RegisterClassType<CBullet>("CBullet");
+		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->RegisterClassType<CRobot>("CRobot");
 
 		// Setting Message System proc
 		MS->InitMessageSystem(CGamePlayState::MessageProc);	
@@ -166,7 +168,7 @@ bool CGamePlayState::Input(void)
 		{
 			if(DI->KeyPressed(DIK_1))
 			{
-				MS->SendMsg(new CCreateEnemyMessage());				
+				MS->SendMsg(new CCreateRobotMessage());				
 			}
 
 
@@ -240,7 +242,7 @@ void CGamePlayState::Update(void)
 			m_pCurLevel->Update();
 
 		// Making tons of enemies
-			//GenerateEnemies();
+			GenerateEnemies();
 
 		// Adding a single char to the string from the queue
 	    // comparing to cheats
@@ -418,6 +420,7 @@ void CGamePlayState::Exit(void)
 		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->UnregisterClassType("CPlayer");
 		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->UnregisterClassType("CEnemy");
 		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->UnregisterClassType("CBullet");
+		CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->UnregisterClassType("CRobot");
 
 		TEXTUREMAN->UnloadTexture(m_nCursorID);		
 		TEXTUREMAN->UnloadTexture(m_nCrosshair);
@@ -570,6 +573,28 @@ void CGamePlayState::MessageProc(CBaseMessage* pMsg)
 		}
 		break;
 
+	case MSG_CREATE_ROBOT:
+		{
+			// Create random enemy in random spot on screen
+			CGamePlayState* pGameState = CGamePlayState::GetInstance();
+
+			// Creating player
+			CRobot* tempRobot = (CRobot*)CSGD_ObjectFactory<string,IBaseInterface>::GetInstance()->CreateObject("CRobot");
+			tempRobot->SetPosX(rand() % (int)(pGameState->m_pCurLevel->GetOffsetX() + CGame::GetInstance()->GetWindowWidth() - pGameState->m_pCurLevel->GetOffsetX()) 
+											+ pGameState->m_pCurLevel->GetOffsetX());
+			tempRobot->SetPosY(pGameState->m_pCurLevel->GetOffsetY() - 64);
+			tempRobot->SetOffsetX(pGameState->m_pCurLevel->GetOffsetX());
+			tempRobot->SetOffsetY(pGameState->m_pCurLevel->GetOffsetY());
+			tempRobot->SetWidth(64);
+			tempRobot->SetHeight(128);
+			pGameState->SetEnemyCount(pGameState->GetEnemyCount() + 1);
+			
+			OM->AddObject(tempRobot);
+			tempRobot->Release();	
+
+		}
+		break;
+
 	case MSG_DESTROY_ENEMY:
 		{				
 			CGamePlayState* pGameState = CGamePlayState::GetInstance();
@@ -580,6 +605,20 @@ void CGamePlayState::MessageProc(CBaseMessage* pMsg)
 			pGameState->SetEnemyCount(pGameState->GetEnemyCount() - 1);
 
 			pGameState->SetScore(pGameState->GetScore() + 100);
+			++pGameState->m_nEnemiesKilled;
+		}
+		break;
+
+	case MSG_DESTROY_ROBOT:
+		{
+			CGamePlayState* pGameState = CGamePlayState::GetInstance();
+
+			// Killing Robot
+			CDestroyRobotMessage* pDEM = (CDestroyRobotMessage*)pMsg;
+			pDEM->GetRobot()->SetIsActive(false);
+			pGameState->SetEnemyCount(pGameState->GetEnemyCount() - 1);
+
+			pGameState->SetScore(pGameState->GetScore() + 200);
 			++pGameState->m_nEnemiesKilled;
 		}
 		break;
@@ -601,7 +640,7 @@ void CGamePlayState::MessageProc(CBaseMessage* pMsg)
 			tVec = Vector2DRotate(tVec,pCBM->GetAngle());			
 
 			// Bullet power
-			if(pCBM->GetOwner()->GetType() == OBJ_ENEMY)
+			if(pCBM->GetOwner()->GetType() == OBJ_ENEMY || pCBM->GetOwner()->GetType() == OBJ_ROBOT)
 			{
 				tVec = tVec * 300.0f;
 				pTempBullet->SetDamage(5);
@@ -653,7 +692,14 @@ void CGamePlayState::GenerateEnemies()
 			if(GetEnemyCount() < 8)
 				if(GetEnemyTimer() > 2.0f)				
 				{
-					MS->SendMsg(new CCreateEnemyMessage());
+					if((rand() % 8) == 3)
+					{
+						// Making bots based on chance
+						MS->SendMsg(new CCreateRobotMessage());
+					}
+					else
+						MS->SendMsg(new CCreateEnemyMessage());
+
 					SetEnemyTimer(0.0f);
 				}			
 		}
@@ -664,7 +710,15 @@ void CGamePlayState::GenerateEnemies()
 			if(GetEnemyCount() < 12)
 				if(GetEnemyTimer() > 1.0f)				
 				{
-					MS->SendMsg(new CCreateEnemyMessage());
+					if((rand() % 4) == 3)
+					{
+						// Making bots based on chance
+						MS->SendMsg(new CCreateRobotMessage());
+					}
+					else
+						MS->SendMsg(new CCreateEnemyMessage());
+
+
 					SetEnemyTimer(0.0f);
 				}		
 		}

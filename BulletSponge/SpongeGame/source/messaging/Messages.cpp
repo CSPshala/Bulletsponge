@@ -2,6 +2,7 @@
 #include "../models/CPlayer.h"
 #include "../models/CEnemy.h"
 #include "../models/CBullet.h"
+#include "../models/CRobot.h"
 
 CCreatePlayerMessage::CCreatePlayerMessage() : CBaseMessage(MSG_CREATE_PLAYER)
 {
@@ -27,6 +28,15 @@ CCreateEnemyMessage::CCreateEnemyMessage() : CBaseMessage(MSG_CREATE_ENEMY)
 
 }
 CCreateEnemyMessage::~CCreateEnemyMessage()
+{
+
+}
+
+CCreateRobotMessage::CCreateRobotMessage() : CBaseMessage(MSG_CREATE_ROBOT)
+{
+
+}
+CCreateRobotMessage::~CCreateRobotMessage()
 {
 
 }
@@ -73,4 +83,15 @@ CDestroyBulletMessage::CDestroyBulletMessage(CBullet* pBullet) : CBaseMessage(MS
 CDestroyBulletMessage::~CDestroyBulletMessage()
 {
 	m_pBullet->Release();
+}
+
+CDestroyRobotMessage::CDestroyRobotMessage(CRobot* pRobot) : CBaseMessage(MSG_DESTROY_ROBOT)
+{
+	m_pRobot = pRobot;
+	m_pRobot->AddRef();
+}
+
+CDestroyRobotMessage::~CDestroyRobotMessage()
+{
+	m_pRobot->Release();
 }

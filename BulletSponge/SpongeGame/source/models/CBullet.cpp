@@ -113,6 +113,14 @@ bool CBullet::CheckCollision(IBaseInterface* pBase)
 				}
 				break;
 
+			case OBJ_ROBOT:
+				{				
+					MS->SendMsg(new CDestroyBulletMessage(this));
+					ES->SendEvent("enemyhit",pBase);
+					return true;
+				}
+				break;
+
 			case OBJ_PLAYER:
 				{
 					ES->SendEvent("playerhit",this);

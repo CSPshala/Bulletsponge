@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-//	File Name	:	"CEnemy.h"
+//	File Name	:	"CRobot.h"
 //	
 //	Author Name	:	JC Ricks
 //	
-//	Purpose		:	To hold all data and functionality of enemy characters
+//	Purpose		:	To take care of robot behavior, closely related to CEnemy
 ///////////////////////////////////////////////////////////////////////////
-#ifndef _CENEMY_H_
-#define _CENEMY_H_
+#ifndef _C_ROBOT_H
+#define _C_ROBOT_H
 
 ////////////////////////////////////////
 //				INCLUDES
@@ -18,16 +18,22 @@ using std::vector;
 #include "CAnimation.h"
 #include "CWorld.h"
 #include "../messaging/IListener.h"
+#include "CEnemy.h"
+////////////////////////////////////////
+//		   FORWARD DECLARATIONS
+////////////////////////////////////////
 
-// State enum
-enum EnemyState {SPAWNING = 0,REST,PATROL,JUMP,SHOOT,FALLING,PUKE,CROUCH,MAX_STATES};
+////////////////////////////////////////
+//				MISC
+////////////////////////////////////////
 
-class CEnemy : public CBase, public IListener
+
+class CRobot : public CBase, public IListener
 {
 public:
 	/********** Construct / Deconstruct / OP Overloads ************/
-		CEnemy();
-		~CEnemy();
+		CRobot();
+		~CRobot();
 
 	/********** Public Utility Functions ************/
 		void Render();
@@ -64,8 +70,7 @@ private:
 			// Behavior change
 			float m_fChange;
 			float m_fShootTimer;
-			float m_fJumpTimer;
-
+			
 		// If spawned in main menu
 			bool m_bMainMenu;
 
@@ -81,6 +86,7 @@ private:
 
 		// Bulletshot sound ID
 		int m_nShotFX;
+		int m_nLongPukeFX;
 
 	/********** Private Accessors ************/		
 		
@@ -92,8 +98,6 @@ private:
 
 	/********** Private Utility Functions ************/
 		virtual void Behavior();
-		void FlashRedTimer(float fTime);
-		void InitStickFigure();
+		void FlashRedTimer(float fTime);		
 };
-
 #endif

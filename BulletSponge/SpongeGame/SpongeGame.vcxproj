@@ -87,6 +87,7 @@
     <ClCompile Include="source\models\CEnemy.cpp" />
     <ClCompile Include="source\models\CLevel.cpp" />
     <ClCompile Include="source\models\CPlayer.cpp" />
+    <ClCompile Include="source\models\CRobot.cpp" />
     <ClCompile Include="source\models\CWorld.cpp" />
     <ClCompile Include="source\SGD Wrappers\CSGD_Direct3D.cpp" />
     <ClCompile Include="source\SGD Wrappers\CSGD_DirectInput.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="source\models\CEnemy.h" />
     <ClInclude Include="source\models\CLevel.h" />
     <ClInclude Include="source\models\CPlayer.h" />
+    <ClInclude Include="source\models\CRobot.h" />
     <ClInclude Include="source\models\CWorld.h" />
     <ClInclude Include="source\SGD Wrappers\CSGD_Direct3D.h" />
     <ClInclude Include="source\SGD Wrappers\CSGD_DirectInput.h" />

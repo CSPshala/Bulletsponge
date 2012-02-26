@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-//	File Name	:	"CEnemy.cpp"
+//	File Name	:	"CRobot.cpp"
 //	
 //	Author Name	:	JC Ricks
 //	
@@ -10,7 +10,7 @@
 //				INCLUDES
 ////////////////////////////////////////
 #include "../Macros.h"
-#include "CEnemy.h"
+#include "CRobot.h"
 #include "CBullet.h"
 
 #include "../SGD_Math.h"
@@ -24,11 +24,11 @@ using std::string;
 ///////////////////////////////////////////////
 //  CONSTRUCTOR / DECONSTRUCT / OP OVERLOADS
 ///////////////////////////////////////////////
-CEnemy::CEnemy()
+CRobot::CRobot()
 	: CBase()
 {
 	// Setting HP
-	SetHP(30);
+	SetHP(40);
 	// Setting hit color
 	m_dwHitColor = D3DCOLOR_ARGB(255,255,255,255);
 	// Setting hit color timer
@@ -37,8 +37,41 @@ CEnemy::CEnemy()
 	m_bMainMenu = false;
 	// Rotation
 	m_fRotation = float(rand() % 90);
+	
+	// Spawn Animation
+	CAnimation SpawnAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_idle.png"),64,128,64,128,1,0,false);
+	m_nAnimations.push_back(SpawnAni);
 
-	InitStickFigure();
+	// Rest Animation
+	CAnimation RestAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_idle.png"),64,128,64,128,1,0,false);
+	m_nAnimations.push_back(RestAni);
+
+	// Patrol Animation
+	CAnimation PatrolAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_patrol.png"),256,128,64,128,4,0,0.08f,true,false);
+	m_nAnimations.push_back(PatrolAni);
+
+	// Jump Animation
+	CAnimation JumpAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_idle.png"),64,128,64,128,1,0,false);
+	m_nAnimations.push_back(JumpAni);
+
+	// Shoot Animation
+	CAnimation ShootAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_fire.png"),128,128,64,128,1,0,0.1f,false,false);
+	m_nAnimations.push_back(ShootAni);
+
+	// Falling Animation
+	CAnimation FallAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_idle.png"),64,128,64,128,1,0,false);
+	m_nAnimations.push_back(FallAni);
+
+	// Puke Animation
+	CAnimation PukeAni(TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_robot_puke.png"),128,128,64,128,2,0,0.8f,true,false);
+
+	// Enemy Bullet
+	m_nEnemyBulletID = TEXTUREMAN->LoadTexture("resource/graphics/robot/JCR_screw.png");
+
+	// Gunshot
+	m_nShotFX = XAUDIO->SFXLoadSound("resource/sound/JCR_colt45.wav");
+
+	SetType(OBJ_ROBOT);
 
 	SetMovementSpeedX(150.0f);
 	SetMovementSpeedY(700.0f);
@@ -49,9 +82,7 @@ CEnemy::CEnemy()
 		// Timer for behavior change
 		m_fChange = 3.1f;
 		// Limits enemy fire
-		m_fShootTimer = 1.1f;
-		// Limits jumping
-		m_fJumpTimer = 5.1f;
+		m_fShootTimer = 1.1f;		
 		// Holds last state
 		m_eLastState = SPAWNING;
 
@@ -62,15 +93,17 @@ CEnemy::CEnemy()
 	ES->RegisterClient("camerachange",this);
 	ES->RegisterClient("enemyhit",this);
 	ES->RegisterClient("enemyfire",this);
+	ES->RegisterClient("enemypuke",this);
 }
 
-CEnemy::~CEnemy()
+CRobot::~CRobot()
 {
 	// Unregistering events
 	ES->UnregisterClient("playerhit",this);
 	ES->UnregisterClient("camerachange",this);
 	ES->UnregisterClient("enemyhit",this);
 	ES->UnregisterClient("enemyfire",this);
+	ES->UnregisterClient("enemypuke",this);
 
 	SAFE_RELEASE(m_pPlatform);
 }
@@ -78,26 +111,12 @@ CEnemy::~CEnemy()
 ////////////////////////////////////////
 //		PUBLIC UTILITY FUNCTIONS
 ////////////////////////////////////////
-void CEnemy::Update(float fElapsedTime)
+void CRobot::Update(float fElapsedTime)
 {
 	if(!m_bMainMenu)
 	{
 		switch(GetState())
-		{
-		case JUMP:
-			{
-				if(m_eLastState != JUMP)
-				{
-					if(m_fJumpTimer > 5.0f)
-					{
-						SetVelY(-GetMovementSpeedY());
-						m_fJumpTimer = 0.0f;
-					}
-
-					
-				}
-			}
-			break;
+		{		
 
 		case PATROL:
 			{
@@ -149,6 +168,13 @@ void CEnemy::Update(float fElapsedTime)
 				// Updating fire timer
 				m_fShootTimer += GAME->GetTimer().GetDeltaTime();
 			}
+			break;
+
+		case PUKE:
+			{
+
+			}
+			break;
 		}		
 
 		/////////////////////////////////////MANUAL UPDATE/////////////////////////////
@@ -170,9 +196,7 @@ void CEnemy::Update(float fElapsedTime)
 		m_eLastState = GetState();
 		// Setting AI state
 		Behavior();
-
-		// Updating jump timer 
-		m_fJumpTimer += GAME->GetTimer().GetDeltaTime();
+				
 	}
 	else
 	{
@@ -186,10 +210,10 @@ void CEnemy::Update(float fElapsedTime)
 	}
 
 	if(GetPosY() > GAME->GetWindowHeight() + 600)
-		MS->SendMsg(new CDestroyEnemyMessage(this));
+		MS->SendMsg(new CDestroyRobotMessage(this));
 }
 
-void CEnemy::Render()
+void CRobot::Render()
 {
 	if(!m_bMainMenu)
 	{
@@ -201,10 +225,10 @@ void CEnemy::Render()
 			bFacingRight = false;
 	
 		// Drawing Player (based on facing)
-		if(bFacingRight)
-			TEXTUREMAN->DrawF(m_nAnimations[GetState()].GetImageID(),GetPosX() - GetOffsetX(),GetPosY() - GetOffsetY(),1.0f,1.0f,&m_nAnimations[GetState()].GetFrame(),0.0f,0.0f,0.0f,m_dwHitColor);
+		if(!bFacingRight)
+			TEXTUREMAN->DrawF(m_nAnimations[GetState()].GetImageID(),GetPosX() - GetOffsetX(),GetPosY() - GetOffsetY(),1.2f,1.2f,&m_nAnimations[GetState()].GetFrame(),0.0f,0.0f,0.0f,m_dwHitColor);
 		else
-			TEXTUREMAN->DrawF(m_nAnimations[GetState()].GetImageID(),(GetPosX() - GetOffsetX()) + GetWidth(),GetPosY() - GetOffsetY(),-1.0f,1.0f,&m_nAnimations[GetState()].GetFrame(),0.0f,0.0f,0.0f,m_dwHitColor);
+			TEXTUREMAN->DrawF(m_nAnimations[GetState()].GetImageID(),(GetPosX() - GetOffsetX()) + GetWidth(),GetPosY() - GetOffsetY(),-1.2f,1.2f,&m_nAnimations[GetState()].GetFrame(),0.0f,0.0f,0.0f,m_dwHitColor);
 	
 		FlashRedTimer(0.08f);
 	}
@@ -214,7 +238,7 @@ void CEnemy::Render()
 	}
 }
 
-void CEnemy::HandleEvent(CEvent* pEvent)
+void CRobot::HandleEvent(CEvent* pEvent)
 {
 	if("camerachange" == pEvent->GetEventID())
 	{
@@ -235,22 +259,24 @@ void CEnemy::HandleEvent(CEvent* pEvent)
 
 				if(GetHP() <= 0)
 				{
-					MS->SendMsg(new CDestroyEnemyMessage(this));
+					MS->SendMsg(new CDestroyRobotMessage(this));
 				}
 			}			
 	}
 
 }
 
-bool CEnemy::CheckCollision(IBaseInterface* pBase)
+bool CRobot::CheckCollision(IBaseInterface* pBase)
 {
 	RECT rTemp;	
+	RECT rCollision = GetCollisionRect();
+	rCollision.bottom += 26;
 
 	switch(pBase->GetType())
 	{
 		case OBJ_PLAYER:
 			{
-				if(IntersectRect(&rTemp,&GetCollisionRect(),&pBase->GetCollisionRect()))
+				if(IntersectRect(&rTemp,&rCollision,&pBase->GetCollisionRect()))
 				{
 					SetVelX(-GetVelX());
 					ES->SendEvent("playerhit",this);
@@ -262,7 +288,7 @@ bool CEnemy::CheckCollision(IBaseInterface* pBase)
 
 		case OBJ_WORLD:
 		{
-			if(IntersectRect(&rTemp,&GetCollisionRect(),&pBase->GetCollisionRect()))
+			if(IntersectRect(&rTemp,&rCollision,&pBase->GetCollisionRect()))
 			{
 				// Checks for top/bottom hit
 				// Reverses Y vel if top hit (so can fall)
@@ -328,7 +354,7 @@ bool CEnemy::CheckCollision(IBaseInterface* pBase)
 ////////////////////////////////////////
 //		PRIVATE UTILITY FUNCTIONS
 ////////////////////////////////////////
-void CEnemy::Behavior()
+void CRobot::Behavior()
 {	
 	if(m_fChange > 3.0f && GetState() != SPAWNING  && GetState() != JUMP)
 	{
@@ -342,7 +368,7 @@ void CEnemy::Behavior()
 	
 	
 }
-void CEnemy::FlashRedTimer(float fTime)
+void CRobot::FlashRedTimer(float fTime)
 {
 	if(m_dwHitColor != D3DCOLOR_ARGB(255,255,255,255))
 	{
@@ -356,40 +382,7 @@ void CEnemy::FlashRedTimer(float fTime)
 			m_fHitColorTime += GAME->GetTimer().GetDeltaTime();		
 	}		
 }
-void CEnemy::InitStickFigure()
-{
-	// Spawn Animation
-	CAnimation SpawnAni(TEXTUREMAN->LoadTexture("resource/graphics/angrystickfigure/JCR_AngryStickFigure_rest.png"),64,128,64,128,1,0,false);
-	m_nAnimations.push_back(SpawnAni);
 
-	// Rest Animation
-	CAnimation RestAni(TEXTUREMAN->LoadTexture("resource/graphics/angrystickfigure/JCR_AngryStickFigure_rest.png"),64,128,64,128,1,0,false);
-	m_nAnimations.push_back(RestAni);
-
-	// Patrol Animation
-	CAnimation PatrolAni(TEXTUREMAN->LoadTexture("resource/graphics/angrystickfigure/JCR_AngryStickFigure_patrol.png"),256,128,64,128,4,0,0.08f,true,false);
-	m_nAnimations.push_back(PatrolAni);
-
-	// Jump Animation
-	CAnimation JumpAni(TEXTUREMAN->LoadTexture("resource/graphics/angrystickfigure/JCR_AngryStickFigure_rest.png"),64,128,64,128,1,0,false);
-	m_nAnimations.push_back(JumpAni);
-
-	// Shoot Animation
-	CAnimation ShootAni(TEXTUREMAN->LoadTexture("resource/graphics/angrystickfigure/JCR_AngryStickFigure_shoot.png"),128,128,64,128,2,0,0.1f,false,false);
-	m_nAnimations.push_back(ShootAni);
-
-	// Falling Animation
-	CAnimation FallAni(TEXTUREMAN->LoadTexture("resource/graphics/angrystickfigure/JCR_AngryStickFigure_rest.png"),64,128,64,128,1,0,false);
-	m_nAnimations.push_back(FallAni);
-
-	// Enemy Bullet
-	m_nEnemyBulletID = TEXTUREMAN->LoadTexture("resource/graphics/JCR_enemybullet.png");
-
-	// Gunshot
-	m_nShotFX = XAUDIO->SFXLoadSound("resource/sound/JCR_colt45.wav");
-
-	SetType(OBJ_ENEMY);
-}
 
 ////////////////////////////////////////
 //	    PUBLIC ACCESSORS / MUTATORS
@@ -398,7 +391,7 @@ void CEnemy::InitStickFigure()
 ////////////////////////////////////////
 //	    PRIVATE ACCESSORS / MUTATORS
 ////////////////////////////////////////
-void CEnemy::SetPlatform(CWorld* pPlatform)
+void CRobot::SetPlatform(CWorld* pPlatform)
 {
 	if(pPlatform == GetPlatform())
 		return;

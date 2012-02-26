@@ -14,6 +14,7 @@
 #include "CWorld.h"
 #include "CEnemy.h"
 #include "CBullet.h"
+#include "CRobot.h"
 #include "../CGame.h"
 #include "../SGD Wrappers/CSGD_TextureManager.h"
 #include "../SGD Wrappers/CSGD_DirectInput.h"
@@ -399,8 +400,17 @@ void CPlayer::HandleEvent(CEvent* pEvent)
 	}	
 	else if("enemyfire" == pEvent->GetEventID())
 	{
-		// Getting enemy
-		CEnemy* pEnemy = (CEnemy*)pEvent->GetParam();
+		CBase* pEnemy = (CBase*)pEvent->GetParam();
+		int nBulletID = -1;
+
+		if(pEnemy->GetType() == OBJ_ENEMY)
+		{
+			nBulletID = ((CEnemy*)pEnemy)->GetBulletID();
+		}
+		else
+		{
+			nBulletID = ((CRobot*)pEnemy)->GetBulletID();
+		}
 
 		// Hand vector
 		tVector2D tShootVector;
@@ -425,7 +435,7 @@ void CPlayer::HandleEvent(CEvent* pEvent)
 			fFireAngle = -1 * fFireAngle;	
 		}
 
-		MS->SendMsg(new CCreateBulletMessage(pEnemy,fFireAngle,pEnemy->GetBulletID()));
+		MS->SendMsg(new CCreateBulletMessage(pEnemy,fFireAngle,nBulletID));
 
 		return;
 	}	

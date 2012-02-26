@@ -3,11 +3,12 @@
 
 typedef int MSGID;
 
-enum eMsgTypes { MSG_NULL = 0,MSG_CREATE_PLAYER,MSG_PLAYER_HIT,MSG_DESTROY_PLAYER,MSG_CREATE_ENEMY,MSG_DESTROY_ENEMY,MSG_CREATE_BULLET,MSG_DESTROY_BULLET, MSG_MAX };
+enum eMsgTypes { MSG_NULL = 0,MSG_CREATE_PLAYER,MSG_PLAYER_HIT,MSG_DESTROY_PLAYER,MSG_CREATE_ENEMY,MSG_CREATE_ROBOT,MSG_DESTROY_ENEMY,MSG_CREATE_BULLET,MSG_DESTROY_BULLET,MSG_DESTROY_ROBOT, MSG_MAX };
 class CBullet;
 class CPlayer;
 class CEnemy;
 class CBase;
+class CRobot;
 
 class CBaseMessage
 {
@@ -55,6 +56,15 @@ public:
 	~CCreateEnemyMessage();	
 };
 
+class CCreateRobotMessage : public CBaseMessage
+{
+private:
+	
+public:
+	CCreateRobotMessage();
+	~CCreateRobotMessage();	
+};
+
 class CCreateBulletMessage : public CBaseMessage
 {
 private:
@@ -100,5 +110,16 @@ public:
 	~CDestroyBulletMessage();
 	CBullet* GetBullet(void) {return m_pBullet;}
 };
+
+class CDestroyRobotMessage : public CBaseMessage
+{
+private:
+	CRobot* m_pRobot;
+public:
+	CDestroyRobotMessage(CRobot* pRobot);
+	~CDestroyRobotMessage();
+	CRobot* GetRobot(void) {return m_pRobot;}
+};
+
 
 #endif

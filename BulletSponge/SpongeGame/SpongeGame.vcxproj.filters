@@ -108,6 +108,9 @@
     <ClCompile Include="source\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\models\CRobot.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\SGD Wrappers\CSGD_Direct3D.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="source\Timer.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\models\CRobot.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
