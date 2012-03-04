@@ -3,7 +3,8 @@
 
 typedef int MSGID;
 
-enum eMsgTypes { MSG_NULL = 0,MSG_CREATE_PLAYER,MSG_PLAYER_HIT,MSG_DESTROY_PLAYER,MSG_CREATE_ENEMY,MSG_CREATE_ROBOT,MSG_DESTROY_ENEMY,MSG_CREATE_BULLET,MSG_DESTROY_BULLET,MSG_DESTROY_ROBOT, MSG_MAX };
+enum eMsgTypes { MSG_NULL = 0,MSG_CREATE_PLAYER,MSG_PLAYER_HIT,MSG_DESTROY_PLAYER,MSG_CREATE_ENEMY,MSG_CREATE_ROBOT,
+					MSG_DESTROY_ENEMY,MSG_CREATE_BULLET,MSG_DESTROY_BULLET,MSG_DESTROY_ROBOT, MSG_CREATE_PUKE, MSG_MAX };
 class CBullet;
 class CPlayer;
 class CEnemy;
@@ -74,6 +75,20 @@ private:
 public:
 	CCreateBulletMessage(CBase* pOwner,float fAngle,int nImageID);
 	~CCreateBulletMessage();
+	CBase* GetOwner(void) {return m_pOwner;}
+	float GetAngle(void) {return m_fAngle;}
+	int GetImage(void) {return m_nImageID;}
+};
+
+class CCreatePukeMessage : public CBaseMessage
+{
+private:
+	CBase* m_pOwner;
+	float m_fAngle;
+	int m_nImageID;
+public:
+	CCreatePukeMessage(CBase* pOwner,float fAngle,int nImageID);
+	~CCreatePukeMessage();
 	CBase* GetOwner(void) {return m_pOwner;}
 	float GetAngle(void) {return m_fAngle;}
 	int GetImage(void) {return m_nImageID;}

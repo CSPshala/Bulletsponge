@@ -172,7 +172,7 @@ bool CGamePlayState::Input(void)
 			}
 
 
-			if(DI->KeyPressed(DIK_P))
+			if(DI->KeyPressed(DIK_ESCAPE))
 			{
 				SetIsPaused(true);
 			}
@@ -653,8 +653,27 @@ void CGamePlayState::MessageProc(CBaseMessage* pMsg)
 			pTempBullet->SetVelX(tVec.fX);
 			pTempBullet->SetVelY(tVec.fY);
 
+			// Setting rotation angle (mainly for screw facing)
+			pTempBullet->SetRotation(pCBM->GetAngle());
+
+			// Checking if it's a screw and whether it's being puked
+			if(pCBM->GetOwner()->GetType() == OBJ_ROBOT)
+			{
+				pTempBullet->SetIsScrew(true);
+
+				if(((CRobot*)pCBM->GetOwner())->GetState() == PUKE)
+					pTempBullet->SetIsPuke(true);
+			}
+
 			OM->AddObject(pTempBullet);
 			pTempBullet->Release();
+		}
+		break;
+
+	case MSG_CREATE_PUKE:
+		{
+
+
 		}
 		break;
 

@@ -158,7 +158,13 @@ void CEnemy::Update(float fElapsedTime)
 
 			// Gravity
 			if(GetState() == JUMP || GetState() == FALLING)
-				SetVelY(GetVelY() + 1000.0f * GAME->GetTimer().GetDeltaTime());
+			{
+				if(!m_bMainMenu)
+					SetVelY(GetVelY() + 1000.0f * GAME->GetTimer().GetDeltaTime());
+				else
+					SetVelY(GetVelY() + 2000.0f * GAME->GetTimer().GetDeltaTime());
+			}
+
 
 			SetPosX(GetPosX()+GetVelX() * GAME->GetTimer().GetDeltaTime());
 			SetPosY(GetPosY()+GetVelY() * GAME->GetTimer().GetDeltaTime());	

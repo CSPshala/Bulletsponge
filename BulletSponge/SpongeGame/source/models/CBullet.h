@@ -33,9 +33,15 @@ public:
 	/********** Public Accessors ************/	
 		CBase* GetOwner() {return m_pOwner;}
 		int GetDamage() {return m_nDamage;}
+		bool GetIsScrew() {return m_bScrew;}
+		bool GetIsPuke() {return m_bPuke;}
+		float GetRotation() {return m_fRotation;}
 	/********** Public Mutators  ************/
 		void SetOwner(CBase* pOwner);
 		void SetDamage(int nDamage) {m_nDamage = nDamage;}
+		void SetIsScrew(bool bScrew) {m_bScrew = bScrew;}
+		void SetIsPuke(bool bPuke) {m_bPuke = bPuke;}
+		void SetRotation(float fRotation) {m_fRotation = fRotation;}
 
 private:
 	/********** Private Members ************/
@@ -43,6 +49,11 @@ private:
 		CBase* m_pOwner;
 		// Time to live
 		float m_fTimer;
+
+		// Is it a screw?
+		bool m_bScrew;
+		// Is it being puked?
+		bool m_bPuke;		
 
 		// Bullet dmg (for player right now)
 		int m_nDamage;

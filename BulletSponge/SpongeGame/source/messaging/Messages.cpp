@@ -54,6 +54,19 @@ CCreateBulletMessage::~CCreateBulletMessage()
 	m_pOwner->Release();
 }
 
+CCreatePukeMessage::CCreatePukeMessage(CBase* pOwner,float fAngle,int nImageID) : CBaseMessage(MSG_CREATE_PUKE)
+{
+	m_pOwner = pOwner;
+	m_pOwner->AddRef();
+	m_fAngle = fAngle;
+	m_nImageID = nImageID;
+}
+
+CCreatePukeMessage::~CCreatePukeMessage()
+{
+	m_pOwner->Release();
+}
+
 CDestroyPlayerMessage::CDestroyPlayerMessage(CPlayer* pPlayer) : CBaseMessage(MSG_DESTROY_PLAYER)
 {
 	m_pPlayer = pPlayer;

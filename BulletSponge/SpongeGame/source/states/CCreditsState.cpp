@@ -77,16 +77,20 @@ void CCreditsState::Enter(void)
 		m_vCredits.push_back("     BULLETSPONGE");
 		m_vCredits.push_back(" ");		
 		m_vCredits.push_back("CREATED BY]");
-		m_vCredits.push_back("    JC RICKS");
+		m_vCredits.push_back("      JC RICKS");
+		m_vCredits.push_back("TWITTER CSPSHALA");
+		m_vCredits.push_back("JOE[RICKS[CSP AT GMAIL");
 		m_vCredits.push_back(" ");
 		m_vCredits.push_back("DRAWN BY]");	
-		m_vCredits.push_back("    JC RICKS");
+		m_vCredits.push_back("      JC RICKS");
+		m_vCredits.push_back("TWITTER CSPSHALA");
+		m_vCredits.push_back("JOE[RICKS[CSP AT GMAIL");
 		m_vCredits.push_back(" ");
 		m_vCredits.push_back("MUSIC AND SOUND BY]");
 		m_vCredits.push_back("    FLASHKIT[COM");
 		m_vCredits.push_back("    ONEUP STUDIOS");
 		m_vCredits.push_back(" ");
-		m_vCredits.push_back("INSTRUCTOR]");
+		m_vCredits.push_back("PRODUCER]");
 		m_vCredits.push_back("    DAVID BROWN");
 
 		m_bInitOnce = true;
@@ -121,7 +125,7 @@ void CCreditsState::Update(void)
 
 	MS->ProcessMessages();
 
-	if(0 > (GAME->GetWindowHeight() - m_fScrollTimer * 10) + (m_vCredits.size() - 1) * 60)
+	if(0 > (GAME->GetWindowHeight() - m_fScrollTimer * 50) + (m_vCredits.size() - 1) * 60)
 		GAME->ChangeState(CMainMenuState::GetInstance());
 }
 
@@ -137,7 +141,7 @@ void CCreditsState::Render(void)
 
 	for(unsigned int i = 0; i < m_vCredits.size(); ++i)
 	{		
-		m_pFont->Print(m_vCredits[i],10,(float)(GAME->GetWindowHeight() - m_fScrollTimer * 10) + i * 60,1,1.0f);
+		m_pFont->Print(m_vCredits[i],10,(float)(GAME->GetWindowHeight() - m_fScrollTimer * 50) + i * 60,1,1.0f);
 	}
 
 	CSGD_Direct3D::GetInstance()->SpriteEnd();
